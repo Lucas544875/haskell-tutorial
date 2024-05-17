@@ -1,4 +1,3 @@
-
 exp :: Integer -> Integer -> Integer
 -- exp x y = x^y
 exp = undefined
