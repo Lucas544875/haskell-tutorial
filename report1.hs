@@ -1,3 +1,4 @@
+-- import Distribution.ModuleName (main)
 exp' :: Integer -> Integer -> Integer
 -- exp x y = x^y
 exp' a b
@@ -23,8 +24,8 @@ foldl' f i [] = i
 foldl' f i (x:xs) = f (foldl' f i xs) x
 
 foldr' :: (Integer -> Integer -> Integer) -> Integer -> [Integer] -> Integer
-foldr' f i [] = 0
-foldr' f i (x : xs) = foldr f (f i x) xs
+foldr' f i [] = i
+foldr' f i (x : xs) = foldr' f (f i x) xs
 
 flatten' :: [[Integer]] -> [Integer]
 flatten' [] = []
@@ -44,3 +45,7 @@ mergeSort xs = merge as bs
         merge xs ys = xs ++ ys
         split :: [Integer] -> ([Integer], [Integer])
         split = splitAt =<< flip div 2 . (+1) . length
+
+main = do
+  print $ exp' 3 5
+  print $ mergeSort [3,2,1]
