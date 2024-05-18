@@ -1,26 +1,46 @@
-exp :: Integer -> Integer -> Integer
+exp' :: Integer -> Integer -> Integer
 -- exp x y = x^y
-exp = undefined
+exp' a b
+  | b == 0    = 1
+  | otherwise = a * exp' a (b-1)
 
-length :: [Integer] -> Integer
-length = undefined
+length' :: [Integer] -> Integer
+length'[] = 0
+length' (x:xs) = 1 + length' xs 
 
 --doubleList [x,y,z,...] = [2x, 2y, 2z, ...]
 
-map :: (Integer -> Integer) -> [Integer] -> [Integer]
+map' :: (Integer -> Integer) -> [Integer] -> [Integer]
 -- map f [x, y, ...] = [f x, f y, ...]
-map = undefined
+map' f [] = []
+map' f (x:xs) = f x : map' f xs
 
---productList [x,y,z,...] = x*y*z*...
+-- productList [x,y,z,...] = x*y*z*...
 
-foldl :: (Integer -> Integer -> Integer) -> Integer -> [Integer] -> Integer
--- foldl f i [x,y,z] = f (f (f i x) y) z
--- sumList, productList の一般化
-foldl = undefined
+-- foldl (+) 5 [1,2,3] = 5 + 1 + 2 + 3
+foldl' :: (Integer -> Integer -> Integer) -> Integer -> [Integer] -> Integer
+foldl' f i [] = i
+foldl' f i (x:xs) = f (foldl' f i xs) x
 
-flatten :: [[Integer]] -> [Integer]
--- flatten [[2,3], [3,4], [1,2,3,4]] = [2,3,3,4,1,2,3,4]
-flatten = undefined
+foldr' :: (Integer -> Integer -> Integer) -> Integer -> [Integer] -> Integer
+foldr' f i [] = 0
+foldr' f i (x : xs) = foldr f (f i x) xs
+
+flatten' :: [[Integer]] -> [Integer]
+flatten' [] = []
+flatten' (x:xs) = x ++ flatten' xs
 
 mergeSort :: [Integer] -> [Integer]
-mergeSort = undefined
+mergeSort [] = []
+mergeSort [x] = [x]
+mergeSort xs = merge as bs
+    where
+        (as', bs') = split xs
+        (as, bs) = (mergeSort as', mergeSort bs')
+        merge :: [Integer] -> [Integer] -> [Integer]
+        merge (x:xs) (y:ys)
+            | x <= y = x : merge xs (y:ys)
+            | otherwise = y : merge (x:xs) ys
+        merge xs ys = xs ++ ys
+        split :: [Integer] -> ([Integer], [Integer])
+        split = splitAt =<< flip div 2 . (+1) . length
