@@ -70,9 +70,3 @@ enqueue q a = q ++ [a]
 dequeue :: Queue a -> Maybe a
 dequeue [] = Nothing
 dequeue (x:xs) = Just x
-
-
-
-
-
-
