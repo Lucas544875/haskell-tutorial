@@ -1,11 +1,10 @@
 --Rose Tree : ノードには任意の子の数のあるツリー
 -- data RoseTree a = ...
 -- 型を定義し、mapを作って
-data RoseTree a = RLeaf | RNode a [RoseTree a]
-mapRT :: (a -> b) -> RoseTree a -> RoseTree b
-mapRT f RLeaf = RLeaf
-mapRT f (RNode a ary) = RNode f a mapRT f ary
-mapRT f (x:xs) = (mapRT f x : mapRT f xs)
+data RoseTree a = RoseLeaf | RoseNode a [RoseTree a]
+mapRose :: (a -> b) -> RoseTree a -> RoseTree b
+mapRose f RoseLeaf = RoseLeaf
+mapRose f (RoseNode a ts) = RoseNode (f a) (map (mapRose f) ts)
 
 
 data BinaryTree a = Leaf | Node a (BinaryTree a) (BinaryTree a)
@@ -13,13 +12,17 @@ data BinaryTree a = Leaf | Node a (BinaryTree a) (BinaryTree a)
 
 -- Right fold on a binary tree
 foldrTree :: (a -> b -> b) -> b -> BinaryTree a -> b
-foldrTree = undefined
+foldrTree f b Leaf = b
+foldrTree f b (Node a t1 t2) = f a (foldrTree f (foldrTree f b t1) t2)
 
 -- 木をレベルごとリストにする関数。
 -- levels $ Node 1 (Node 2 Leaf (Node 3 Leaf Leaf)) (Node 4 (Node 5 Leaf Leaf) (Node 6 (Node 7 Leaf Leaf) Leaf))
 -- = [[1],[2,4],[3,5,6], [7]]
 levels :: BinaryTree a -> [[a]]
-levels = undefined
+levels Leaf = [[]]
+levels (Node a l r) = [a] : zipWith (++) (levels l) (levels r)
+    where
+        zipw
 
 -- 関数から木を作りましょう
 unfoldTree :: (a -> Maybe (n, a, a)) -> a -> BinaryTree n
